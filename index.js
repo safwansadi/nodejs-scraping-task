@@ -1,13 +1,13 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
+const { GET } = require("./api");
 
 let initialPage = 0;
 
 function getTotalAdsCount() {
-  axios
-    .get(
-      `https://www.otomoto.pl/ciezarowe/uzytkowe/mercedes-benz/od-+2014/q-actros?search%5Bfilter_enum_damaged%5D=0&search%5Border%5D=created_at+%3Adesc&page=${initialPage}`
-    )
+  GET(
+    `https://www.otomoto.pl/ciezarowe/uzytkowe/mercedes-benz/od-+2014/q-actros?search%5Bfilter_enum_damaged%5D=0&search%5Border%5D=created_at+%3Adesc&page=${initialPage}`
+  )
     .then((response) => {
       const $ = cheerio.load(response.data);
       const featuredArticles = $("main article");
@@ -17,10 +17,9 @@ function getTotalAdsCount() {
 }
 
 function addItem() {
-  axios
-    .get(
-      `https://www.otomoto.pl/ciezarowe/uzytkowe/mercedes-benz/od-+2014/q-actros?search%5Bfilter_enum_damaged%5D=0&search%5Border%5D=created_at+%3Adesc&page=${initialPage}`
-    )
+  GET(
+    `https://www.otomoto.pl/ciezarowe/uzytkowe/mercedes-benz/od-+2014/q-actros?search%5Bfilter_enum_damaged%5D=0&search%5Border%5D=created_at+%3Adesc&page=${initialPage}`
+  )
     .then((response) => {
       const $ = cheerio.load(response.data);
       const featuredArticles = $("main article");
@@ -38,10 +37,9 @@ function addItem() {
 }
 
 function fetchAds() {
-  axios
-    .get(
-      `https://www.otomoto.pl/ciezarowe/uzytkowe/mercedes-benz/od-+2014/q-actros?search%5Bfilter_enum_damaged%5D=0&search%5Border%5D=created_at+%3Adesc&page=${initialPage}`
-    )
+  GET(
+    `https://www.otomoto.pl/ciezarowe/uzytkowe/mercedes-benz/od-+2014/q-actros?search%5Bfilter_enum_damaged%5D=0&search%5Border%5D=created_at+%3Adesc&page=${initialPage}`
+  )
     .then((response) => {
       const $ = cheerio.load(response.data);
       const featuredArticles = $("main article");
@@ -57,8 +55,7 @@ function fetchAds() {
 }
 
 function scrapeTruckItem(itemUrl) {
-  axios
-    .get(itemUrl)
+  GET(itemUrl)
     .then((response) => {
       let elems = [];
 
@@ -82,8 +79,8 @@ function scrapeTruckItem(itemUrl) {
       });
 
       let obj = {
-        title: title, //
-        price: price, //
+        title: title,
+        price: price,
         id: id,
         productionDate: elems[4],
         registraionDate: elems[12],
@@ -92,7 +89,9 @@ function scrapeTruckItem(itemUrl) {
       };
       console.log(obj);
     })
-    .catch((err) => console.log("Fetch error " + err));
+    .catch((err) => {
+      console.log("Fetch error " + err);
+    });
 }
 
 //iterate over pages
