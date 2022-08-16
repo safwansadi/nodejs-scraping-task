@@ -61,35 +61,34 @@ function scrapeTruckItem(itemUrl) {
     .get(itemUrl)
     .then((response) => {
       let elems = [];
-      let idArray = [];
 
       const $ = cheerio.load(response.data);
 
-      let title = $(
-        "div.offer-summary span.offer-title.big-text.fake-title"
+      let title = $("div.offer-summary span.offer-title.big-text.fake-title")
+        .text()
+        .replace(/\n/g, "")
+        .trim();
+
+      let price = $("div.offer-summary div.price-wrapper div.offer-price")
+        .attr("data-price")
+        .trim();
+
+      let id = $(
+        "div.offer-meta span.offer-meta__item span#ad_id.offer-meta__value"
       ).text();
 
-      let price = $("div.offer-summary div.price-wrapper div.offer-price").attr(
-        "data-price"
-      );
-
-      $("div.offer-meta span.offer-meta__item").each((_, elem) => {
-        idArray.push($(elem).text());
-      });
-      $(
-        "div.parametersArea div.offer-params ul.offer-params__list li div"
-      ).each((_, elem) => {
-        elems.push($(elem).text());
+      $("li.offer-params__item div.offer-params__value").each((_, elem) => {
+        elems.push($(elem).text().replace(/\n/g, "").trim());
       });
 
       let obj = {
-        title: title.replace(/\n/g, "").trim(),
-        price: price.trim(),
-        id: idArray[1].replace(/\n/g, "").trim(),
-        productionDate: elems[4].replace(/\n/g, "").trim(),
-        registraionDate: elems[12].replace(/\n/g, "").trim(),
-        power: elems[7].replace(/\n/g, "").trim(),
-        mileage: elems[5].replace(/\n/g, "").trim(),
+        title: title, //
+        price: price, //
+        id: id,
+        productionDate: elems[4],
+        registraionDate: elems[12],
+        power: elems[7],
+        mileage: elems[5],
       };
       console.log(obj);
     })
