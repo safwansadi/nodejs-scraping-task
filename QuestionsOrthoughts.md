@@ -1,12 +1,3 @@
-# nodejs-scraping-task
-
-after cloning,  
-`npm install`  
-To run the the code  
-`npm run start`
-
-# questions/thoughts:
-
 ### 1) Retry stratagy :
 
 <b>Ans: </b> Calling the ads fetch method recursively..

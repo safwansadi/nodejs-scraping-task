@@ -11,7 +11,7 @@ function getTotalAdsCount() {
     .then((response) => {
       const $ = cheerio.load(response.data);
       const featuredArticles = $("main article");
-      console.log("total ads ", featuredArticles.length);
+      console.log("total ads in initial page ", featuredArticles.length);
     })
     .catch((err) => console.log("Fetch error " + err));
 }
@@ -102,7 +102,8 @@ function getNextPage() {
 
 //Scrape all pages, all ads
 function getAllAds() {
-  for (let i = 1; i <= 13; i++) {
+  let totalPage = 13;
+  for (let i = 1; i <= totalPage; i++) {
     getNextPage();
   }
 }
